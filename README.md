@@ -12,16 +12,17 @@ A custom C++ rendering engine built on Direct3D 12, with a parallel D3D11 path b
 
 ## Build
 
-**Requirements:** Windows 10/11 64-bit, Visual Studio 2022 (Desktop C++ workload), CMake ≥ 3.29, vcpkg with `VCPKG_ROOT` set.
+**Requirements:** Windows 10/11 64-bit, Visual Studio 2022 or above (Desktop C++ workload), CMake ≥ 3.29.
 
 ```bat
+git clone <repo-url>
+External\vcpkg\bootstrap-vcpkg.bat
 cmake --preset windows-x64-debug
-cmake --build --preset debug
 ```
 
-Output: `build/debug/OutputFile/bin/Client.exe`
+Then open the generated Visual Studio solution in the `build/` directory.
 
-For release: replace `debug` with `release` in both commands.
+For release: use `--preset windows-x64-release` instead.
 
 ## Dependencies
 
