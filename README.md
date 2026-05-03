@@ -24,6 +24,38 @@ Then open the generated Visual Studio solution in the `build/` directory.
 
 For release: use `--preset windows-x64-release` instead.
 
+## Scenes
+
+### Sponza (New Intel Sponza)
+
+The Sponza scene is not included in the repository due to its size. To use it:
+
+1. Download the **New Sponza Scene** from Intel's Graphics Research Samples page:
+   https://www.intel.com/content/www/us/en/developer/topic-technology/graphics-research/samples.html
+2. Extract the contents so that the following files are placed under `OutputFile/content/mesh/sponza/`:
+   - `NewSponza_Main_glTF_003.gltf` + `NewSponza_Main_glTF_003.bin`
+   - `textures/` folder
+   - Any other files from the archive (FBX, USDA, MAX variants can be ignored)
+
+The engine will load `NewSponza_Main_glTF_003.gltf` from that path when the Sponza scene is selected.
+
+## Assets & Attributions
+
+The following third-party assets are used in this project under their respective Creative Commons licenses:
+
+### 3D Models
+
+| Asset | Author | License | Source |
+|-------|--------|---------|--------|
+| Game Boy Classic | Georg Klein (geoshimi) | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) | [Sketchfab](https://sketchfab.com/3d-models/game-boy-classic-0ae80019e6f046168923286d7e628f6f) |
+| Leather Armchair / Coffee Table / Floorlamp | YJ_ | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) | [Sketchfab](https://sketchfab.com/3d-models/leather-armchair-coffee-table-floorlamp-fcce92a09de84456a071ea6117b57cbc) |
+
+### HDRIs
+
+| Asset | Author | License | Source |
+|-------|--------|---------|--------|
+| Venice Sunset | Greg Zaal | [CC0](https://creativecommons.org/publicdomain/zero/1.0/) | [Poly Haven](https://polyhaven.com/a/venice_sunset) |
+
 ## Dependencies
 
 | Library | Purpose |
