@@ -1,73 +1,32 @@
 # YannEngine
 
-A personal DirectX 12 rendering engine built in C++17.
+A custom C++ rendering engine built on Direct3D 12, with a parallel D3D11 path behind a shared RHI interface.
 
-## Features
+## Highlights
 
-- DirectX 12 rendering backend
-- Asset loading via [Assimp](https://github.com/assimp/assimp)
-- Texture processing via [DirectXTex](https://github.com/microsoft/DirectXTex)
-- HLSL shader pipeline
-- Modular architecture: Engine / Scripts / CodeGen / Client
-
-## Prerequisites
-
-| Tool | Version |
-|------|---------|
-| Windows 10/11 | 64-bit |
-| Visual Studio 2022 | with "Desktop development with C++" workload |
-| CMake | ≥ 3.29 |
-| vcpkg | latest ([install guide](https://learn.microsoft.com/en-us/vcpkg/get_started/get-started)) |
-
-Make sure the `VCPKG_ROOT` environment variable is set to your vcpkg installation directory.
-
-```bat
-set VCPKG_ROOT=C:\vcpkg
-```
+- **Custom RHI abstraction** — `IRHIDevice / IRHICommandList / IRHITexture / …` with DX12 (primary) and DX11 (reference) back-ends switchable at compile time. DX12 backend includes hand-rolled descriptor heap allocators, dynamic shader-visible heap, per-resource state tracker with pending barrier resolution, and triple-buffered swap chain.
+- **Deferred PBR renderer** — 5-target G-Buffer (color, normal, position, emissive, metal/rough/AO), light-volume per-light draw with Cook-Torrance BRDF (GGX + Smith + Schlick), PCF shadow maps with texel-snapped orthographic projection, and forward + transparency pass layered on the HDR target.
+- **GPU-compute IBL pipeline** — equirectangular HDR → cubemap, diffuse irradiance convolution, split-sum specular prefilter (importance-sampled GGX, 5 mips), and BRDF LUT, all baked on the GPU at load time via compute shaders.
+- **Material instance system** — parent `CMaterial` + `CMaterialInstance` overrides (UE-style), glTF and Unreal ORM packing supported in the same PBR shader, asset hot-reload.
+- **GPU particle system** — per-frame compute-shader tick updates the particle buffer in place; render pass draws from the same buffer inside the HDR pipeline.
 
 ## Build
 
-```bat
-# Configure (installs dependencies automatically via vcpkg manifest mode)
-cmake --preset windows-x64-debug
+**Requirements:** Windows 10/11 64-bit, Visual Studio 2022 (Desktop C++ workload), CMake ≥ 3.29, vcpkg with `VCPKG_ROOT` set.
 
-# Build
+```bat
+cmake --preset windows-x64-debug
 cmake --build --preset debug
 ```
 
-For a release build:
+Output: `build/debug/OutputFile/bin/Client.exe`
 
-```bat
-cmake --preset windows-x64-release
-cmake --build --preset release
-```
-
-The compiled executable and shaders are placed in:
-
-```
-build/debug/OutputFile/bin/Client.exe
-build/debug/OutputFile/content/shader/
-```
-
-## Project Structure
-
-```
-YannEngine/
-├── src/
-│   ├── Engine/       # Core rendering (DX12, shaders)
-│   ├── Scripts/      # Game/scene logic
-│   ├── CodeGen/      # Code generation utilities
-│   └── Client/       # Application entry point
-├── CMakeLists.txt
-├── CMakePresets.json
-├── vcpkg.json        # Dependency manifest
-└── vcpkg-configuration.json
-```
+For release: replace `debug` with `release` in both commands.
 
 ## Dependencies
 
 | Library | Purpose |
 |---------|---------|
-| [Assimp](https://github.com/assimp/assimp) | 3D asset import |
-| [DirectXTex](https://github.com/microsoft/DirectXTex) | Texture loading & processing |
+| [Assimp](https://github.com/assimp/assimp) | FBX / glTF mesh import |
+| [DirectXTex](https://github.com/microsoft/DirectXTex) | Texture loading (DDS / PNG / HDR) |
 | d3d12 / dxgi / dxguid | DirectX 12 system libraries |

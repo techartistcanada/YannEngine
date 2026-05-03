@@ -393,6 +393,7 @@ void CTestLevel3D::CreateTestLevel()
 
 	pSkyBox->SkyBox()->SetSkyBoxType(SKYBOX_TYPE::SPHERE);
 	pSkyBox->SkyBox()->SetSkyBoxTexture(CAssetMgr::GetInst()->Load<CTexture>(L"plains_sunset_4k", L"texture\\SkyBox\\venice_sunset_4k.hdr"));
+	pSkyBox->SkyBox()->SetVisible(false);
 
 	pLevel->AddObject(0, pSkyBox);
 
@@ -429,6 +430,7 @@ void CTestLevel3D::CreateTestLevel()
 	pCutFish->BoundingBox()->SetRadius(600.f);
 
 	pLevel->AddObject(0, pCutFish);
+	*/
 
 	// =====================
 	// Gameboy
@@ -477,8 +479,24 @@ void CTestLevel3D::CreateTestLevel()
 	
 	// Load FBX mesh
 	pSetChairTableLamp->MeshRenderer()->SetMesh(CAssetMgr::GetInst()->Load<CMesh>(L"SofaTableLamp", L"mesh\\Set_chair_table_lamp.fbx"));
+	Ptr<CMesh> pSofaMesh = pSetChairTableLamp->MeshRenderer()->GetMesh();
+	for (UINT i = 0; i < pSofaMesh->GetSubMeshCount(); ++i)
+	{
+		const CMesh::tSubMesh& sm = pSofaMesh->GetSubMesh(i);
+		wchar_t buf[256];
+		swprintf_s(buf, L"SofaTableLamp SubMesh[%u]: IndexStart=%u, IndexCount=%u, MaterialIndex=%u\n",
+				   i, sm.IndexStart, sm.IndexCount, sm.MaterialIndex);
+		OutputDebugString(buf);
+	}
+
+
 	CMaterialInstance* pSofaTableLampMI = new CMaterialInstance;
 	pSofaTableLampMI->SetParentMaterial(pPBRParent);
+	// Assign material to ALL submesh slots
+	for (UINT i = 0; i < pSofaMesh->GetSubMeshCount(); ++i)
+	{
+		pSetChairTableLamp->MeshRenderer()->SetMaterial(pSofaTableLampMI, i);
+	}
 	pSofaTableLampMI->SetTexOverride(TEX_PARAM::TEX_0,
 		CAssetMgr::GetInst()->Load<CTexture>(L"texture\\sofa_table_lamp_basecolor.png", L"texture\\SetChair_Table_Lamp_Basecolor.png"));
 	pSofaTableLampMI->SetTexOverride(TEX_PARAM::TEX_1,
@@ -487,16 +505,17 @@ void CTestLevel3D::CreateTestLevel()
 		CAssetMgr::GetInst()->Load<CTexture>(L"texture\\sofa_table_lamp_ORM.png", L"texture\\SetChair_Table_Lamp_ORM.png"));
 	pSofaTableLampMI->SetTexOverride(TEX_PARAM::TEX_3,
 		CAssetMgr::GetInst()->Load<CTexture>(L"texture\\sofa_table_lamp_emissive.png", L"texture\\SetChair_Table_Lamp_Emissive.png"));
+	pSofaTableLampMI->SetScalarOverride(SCALAR_PARAM::VEC4_1, Vec4(1.f, 1.f, 1.f, 1.f));
 	pSetChairTableLamp->MeshRenderer()->SetMaterial(pSofaTableLampMI);
 
 	pSetChairTableLamp->BoundingBox()->SetAbsolute(true);
 	pSetChairTableLamp->BoundingBox()->SetOffsetPos(Vec3(0.f, 0.f, 0.f));
 	pSetChairTableLamp->BoundingBox()->SetRadius(600.f);
 	pLevel->AddObject(0, pSetChairTableLamp);
-	*/
 	// =====================
 	// Sponza
 	// =====================
+	/*
 	CGameObject* pSponza = CModelImporter::Load(L"mesh\\sponza\\NewSponza_Main_glTF_003.gltf");
 	pSponza->SetName(L"Sponza");
 	pSponza->Transform()->SetRelativePos(Vec3(0.f, 0.f, 0.f));

@@ -91,9 +91,15 @@ void CRenderMgr::display_camerapos()
 		return;
 
 	Vec3 vPos = pCam->GetOwner()->Transform()->GetRelativePos();
+	Vec3 vRot = pCam->GetOwner()->Transform()->GetRelativeRotation();
 
 	wchar_t szBuf[255] = {};
 	swprintf_s(szBuf, L"Cam Pos: (%.1f, %.1f, %.1f)", vPos.x, vPos.y, vPos.z);
+
+	swprintf_s(szBuf, L"Cam Rot: (%.1f, %.1f, %.1f)",
+		XMConvertToDegrees(vRot.x),
+		XMConvertToDegrees(vRot.y),
+		XMConvertToDegrees(vRot.z));
 
 	CFontMgr::GetInst()->DrawFont(szBuf, 10.f, 75.f, 20.f, FONT_RGBA(0, 255, 0, 255));
 }

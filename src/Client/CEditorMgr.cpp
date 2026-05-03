@@ -28,6 +28,8 @@ void CEditorMgr::init()
 
 	pEditorCam->Camera()->LayerCheckAll();
 	pEditorCam->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
+	pEditorCam->Transform()->SetRelativePos(Vec3(-1037.f, 1557.f, -1520.f));
+	pEditorCam->Transform()->SetRelativeRotation(Vec3(ToRadians(28.f), ToRadians(38.f), ToRadians(0.f)));
 	CRenderMgr::GetInst()->RegisterEditorCamera(pEditorCam->Camera());
 	
 	m_vecEditorObjects.push_back(pEditorCam);
